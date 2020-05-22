@@ -32,9 +32,17 @@ function App() {
     });
   }, []);
 
-  function handleAddProject() {
-    setProjects([...projects, `Novo Projeto ${Date.now()}`]);
-    console.log(projects);
+  async function handleAddProject() {
+    //setProjects([...projects, `Novo Projeto ${Date.now()}`]);
+    
+    const response = await api.post('projects', {
+      title: `Novo Projeto ${Date.now()}`,
+      owner: "Danilo"
+    });
+
+    const project = response.data;
+
+    setProjects([...projects, project]);
   }
 
   return (
@@ -42,7 +50,7 @@ function App() {
       <Header title="Home" />
       <img width={300} src={backgroundImage}/>
       <ul>
-        {projects.map(project => <li key={project.id}>{project.title}</li>)}
+        {projects.map(project => <li key={project.id}>{project.title} ({project.owner})</li>)}
       </ul>
       <button type="button" onClick={handleAddProject}>Adicionar projeto</button>
     </>
